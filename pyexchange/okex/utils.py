@@ -7,7 +7,7 @@ from . import consts as c
 
 
 def sign(message, secretKey):
-    mac = hmac.new(bytes(secretKey, encoding='utf8'), bytes(message, encoding='utf-8'), digestmod='sha256')
+    mac = hmac.new(bytes(secretKey, encoding="utf8"), bytes(message, encoding="utf-8"), digestmod="sha256")
     d = mac.digest()
     return base64.b64encode(d)
 
@@ -66,10 +66,10 @@ def get_instrument_id(symbol, contract_type):
 
 
 def get_due(contract_type, timestamp=None):
-    now = datetime.datetime.now(tz=timezone('Asia/Shanghai'))
+    now = datetime.datetime.now(tz=timezone("Asia/Shanghai"))
     if timestamp is not None:
-        now = datetime.datetime.fromtimestamp(timestamp / 1000, tz=timezone('Asia/Shanghai'))
-    last_friday = datetime.datetime(now.year, now.month, now.day, 16, 0, 0, 0, timezone('Asia/Shanghai'))
+        now = datetime.datetime.fromtimestamp(timestamp / 1000, tz=timezone("Asia/Shanghai"))
+    last_friday = datetime.datetime(now.year, now.month, now.day, 16, 0, 0, 0, timezone("Asia/Shanghai"))
     weekday = now.weekday()
 
     if weekday > 4 or (weekday == 4 and now.hour >= 16):
@@ -84,17 +84,17 @@ def get_due(contract_type, timestamp=None):
     elif contract_type == "next_week":
         return next_week
     else:
-        quarter = datetime.datetime(2017, 3, 31, 16, 0, 0, 0, timezone('Asia/Shanghai'))
+        quarter = datetime.datetime(2017, 3, 31, 16, 0, 0, 0, timezone("Asia/Shanghai"))
         while quarter < next_week:
             quarter += datetime.timedelta(days=91)
         return quarter
 
 
 def get_the_due(contract_type, timestamp=None):
-    now = datetime.datetime.now(tz=timezone('Asia/Shanghai'))
+    now = datetime.datetime.now(tz=timezone("Asia/Shanghai"))
     if timestamp is not None:
-        now = datetime.datetime.fromtimestamp(timestamp / 1000, tz=timezone('Asia/Shanghai'))
-    last_friday = datetime.datetime(now.year, now.month, now.day, 16, 0, 0, 0, timezone('Asia/Shanghai'))
+        now = datetime.datetime.fromtimestamp(timestamp / 1000, tz=timezone("Asia/Shanghai"))
+    last_friday = datetime.datetime(now.year, now.month, now.day, 16, 0, 0, 0, timezone("Asia/Shanghai"))
     weekday = now.weekday()
 
     if weekday > 4 or (weekday == 4 and now.hour >= 16):
@@ -136,14 +136,14 @@ def get_the_quarter(date):
     return datetime.datetime(
         date.year + int(flags[num] / 12),
         flags[num] % 12,
-        1, 0, 0, 0, 0, tzinfo=timezone('Asia/Shanghai'),
+        1, 0, 0, 0, 0, tzinfo=timezone("Asia/Shanghai"),
     )
 
 
 def signature(timestamp, method, request_path, body, secret_key):
-    if str(body) == '{}' or str(body) == 'None':
-        body = ''
+    if str(body) == "{}" or str(body) == "None":
+        body = ""
     message = str(timestamp) + str.upper(method) + request_path + str(body)
-    mac = hmac.new(bytes(secret_key, encoding='utf8'), bytes(message, encoding='utf-8'), digestmod='sha256')
+    mac = hmac.new(bytes(secret_key, encoding="utf8"), bytes(message, encoding="utf-8"), digestmod="sha256")
     d = mac.digest()
     return base64.b64encode(d)
