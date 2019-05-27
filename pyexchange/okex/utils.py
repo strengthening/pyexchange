@@ -53,6 +53,7 @@ def get_instrument_id(symbol, contract_type):
 
     this_week = last_friday + datetime.timedelta(days=7)
     next_week = last_friday + datetime.timedelta(days=14)
+
     if contract_type == "this_week":
         return symbol + "-" + this_week.strftime("%y%m%d")
     elif contract_type == "next_week":
@@ -137,8 +138,6 @@ def get_the_quarter(date):
         flags[num] % 12,
         1, 0, 0, 0, 0, tzinfo=timezone('Asia/Shanghai'),
     )
-
-    pass
 
 
 def signature(timestamp, method, request_path, body, secret_key):
