@@ -42,52 +42,8 @@ def get_timestamp():
 
 def get_instrument_id(symbol, contract_type):
     symbol = symbol.upper().replace("_", "-")
-    now = datetime.datetime.now(tz=timezone('Asia/Shanghai'))
-    last_friday = datetime.datetime(now.year, now.month, now.day, 16, 0, 0, 0, timezone('Asia/Shanghai'))
-    weekday = now.weekday()
-
-    if weekday > 4 or (weekday == 4 and now.hour >= 16):
-        last_friday += datetime.timedelta(days=4 - weekday)
-    else:
-        last_friday += datetime.timedelta(days=-3 - weekday)
-
-    this_week = last_friday + datetime.timedelta(days=7)
-    next_week = last_friday + datetime.timedelta(days=14)
-
-    if contract_type == "this_week":
-        return symbol + "-" + this_week.strftime("%y%m%d")
-    elif contract_type == "next_week":
-        return symbol + "-" + next_week.strftime("%y%m%d")
-    else:
-        quarter = datetime.datetime(2017, 3, 31, 16, 0, 0, 0, timezone('Asia/Shanghai'))
-        while quarter < next_week:
-            quarter += datetime.timedelta(days=91)
-        return symbol + "-" + quarter.strftime("%y%m%d")
-
-
-def get_due(contract_type, timestamp=None):
-    now = datetime.datetime.now(tz=timezone("Asia/Shanghai"))
-    if timestamp is not None:
-        now = datetime.datetime.fromtimestamp(timestamp / 1000, tz=timezone("Asia/Shanghai"))
-    last_friday = datetime.datetime(now.year, now.month, now.day, 16, 0, 0, 0, timezone("Asia/Shanghai"))
-    weekday = now.weekday()
-
-    if weekday > 4 or (weekday == 4 and now.hour >= 16):
-        last_friday += datetime.timedelta(days=4 - weekday)
-    else:
-        last_friday += datetime.timedelta(days=-3 - weekday)
-
-    this_week = last_friday + datetime.timedelta(days=7)
-    next_week = last_friday + datetime.timedelta(days=14)
-    if contract_type == "this_week":
-        return this_week
-    elif contract_type == "next_week":
-        return next_week
-    else:
-        quarter = datetime.datetime(2017, 3, 31, 16, 0, 0, 0, timezone("Asia/Shanghai"))
-        while quarter < next_week:
-            quarter += datetime.timedelta(days=91)
-        return quarter
+    due_date = get_the_due(contract_type)
+    return "{}-{}".format(symbol, due_date.strftime("%y%m%d"))
 
 
 def get_the_due(contract_type, timestamp=None):
@@ -120,9 +76,9 @@ def get_the_due(contract_type, timestamp=None):
         16, 0, 0, 0, tzinfo=timezone("Asia/Shanghai"),
     )
 
-    if now+datetime.timedelta(weeks=2)<the_quarter:
+    if now + datetime.timedelta(weeks=2) < the_quarter:
         return the_quarter
-    return the_quarter+datetime.timedelta(days=91)
+    return the_quarter + datetime.timedelta(days=91)
 
 
 def get_the_quarter(date):
