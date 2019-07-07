@@ -81,6 +81,17 @@ def get_the_due(contract_type, timestamp=None):
     return the_quarter + datetime.timedelta(days=91)
 
 
+def get_the_contract_type(due_timestamp, timestamp = None):
+    minus = due_timestamp - timestamp
+
+    if minus< 7*24*60*60*1000:
+        return "this_week"
+    elif minus<14*24*60*60*1000:
+        return "next_week"
+    else:
+        return "quarter"
+
+
 def get_the_quarter(date):
     num = 0
     flags = [4, 7, 10, 13]

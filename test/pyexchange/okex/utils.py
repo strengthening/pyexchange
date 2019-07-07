@@ -8,6 +8,9 @@ class TestUtils(unittest.TestCase):
     def test_get_the_due(self):
         print(get_the_due("quarter"))
 
+    # def test_get_the_contract_type(self):
+    #     print(get_the_contract_type())
+
     def test_get_instrument_id(self):
         print(get_instrument_id("etc_usd", "this_week"))
 
